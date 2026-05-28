@@ -2,8 +2,8 @@ name: Auto Sync Fork
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Berjalan otomatis setiap tengah malam (WIB sekitar jam 7 pagi)
-  workflow_dispatch:    # Tombol manual jika ingin sync sekarang juga
+    - cron: '0 0 * * *' # Setiap hari jam 00:00 UTC
+  workflow_dispatch:    # Tombol manual
 
 jobs:
   sync:
@@ -18,11 +18,11 @@ jobs:
         id: sync
         uses: aormsby/Fork-Sync-With-Upstream-action@v3.4.1
         with:
-          upstream_repository: AhmadRizkyFebianto/bakoel_oli
-          upstream_branch: main
-          target_branch: main
-          target_token: ${{ secrets.GITHUB_TOKEN }}
+          # Parameter yang diperbaiki sesuai dokumentasi terbaru
+          upstream_sync_repo: AhmadRizkyFebianto/bakoel_oli
+          upstream_sync_branch: main
+          target_sync_branch: main
+          target_repo_token: ${{ secrets.GITHUB_TOKEN }} # Gunakan token bawaan GitHub
 
-      - name: Sync Check
-        if: success()
-        run: echo "Sinkronisasi berhasil dilakukan."
+          # Setel ke true jika ingin memaksa sync meskipun ada perbedaan (opsional)
+          test_mode: false
