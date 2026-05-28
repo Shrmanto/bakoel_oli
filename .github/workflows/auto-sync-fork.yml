@@ -1,0 +1,28 @@
+name: Auto Sync Fork
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Berjalan otomatis setiap tengah malam (WIB sekitar jam 7 pagi)
+  workflow_dispatch:    # Tombol manual jika ingin sync sekarang juga
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+
+      - name: Sync upstream changes
+        id: sync
+        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4.1
+        with:
+          upstream_repository: AhmadRizkyFebianto/bakoel_oli
+          upstream_branch: main
+          target_branch: main
+          target_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync Check
+        if: success()
+        run: echo "Sinkronisasi berhasil dilakukan."
